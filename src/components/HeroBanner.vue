@@ -1,6 +1,6 @@
 <template>
     <!-- Top Section -->
-    <section class="storefront">
+    <div class="storefront">
         <NavBar />
         <div class="slogan">
             <h1 class="slogan-h1">Your one stop authorized motorcycle dealer</h1>
@@ -12,7 +12,7 @@
                 Contact Us
             </button>
         </div>
-    </section>
+    </div>
 
     <!-- Middle section -->
     <section class="services">
@@ -158,6 +158,8 @@ export default {
     display: flex;
     flex-direction: column;
     align-content: space-around;
+    border: 1px solid black;
+    padding-bottom: 20px;
 }
 
 .slogan {
