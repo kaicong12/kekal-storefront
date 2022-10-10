@@ -35,7 +35,6 @@ button {
     align-items: center;
     gap: 10px;
     background: rgba(255, 255, 255, 0.1);
-    font-family: 'Inter';
     font-weight: 700;
     font-size: 16px;
     color: #FFFFFF;
