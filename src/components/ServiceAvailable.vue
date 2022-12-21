@@ -21,5 +21,9 @@ export default {
 <style scoped>
   .container {
     flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #F1F1F1;
   }
 </style>
