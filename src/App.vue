@@ -3,9 +3,8 @@
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,300&display=swap');
 #app {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Rubik', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -14,20 +13,11 @@
 
 body {
   margin: 0px;
-  padding: 0px
+  padding: 0px;
 }
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+li {
+  list-style: none;
 }
 
 button {
