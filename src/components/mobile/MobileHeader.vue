@@ -40,7 +40,7 @@ export default {
   name: "MobileHeader",
   data() {
     return {
-      toggleMenu: true,
+      toggleMenu: false,
     }
   }
 }
