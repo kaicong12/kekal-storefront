@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import MobileHome from "@/views/MobileHome";
+import MobileHome from "@/views/mobile/MobileHome";
 
 const routes = [
   {
