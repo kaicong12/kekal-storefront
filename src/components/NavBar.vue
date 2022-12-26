@@ -1,8 +1,8 @@
 !<template>
   <div class="header">
-        <img src="../assets/Logo.svg" alt="logo" class="logo">
+        <img src="../assets/icons/Logo.svg" alt="logo" class="logo">
         <button>
-            <img src="../assets/Frame.svg" alt="facebook icon">
+            <img src="../assets/icons/Frame.svg" alt="facebook icon">
             Facebook Page
         </button>
     </div>

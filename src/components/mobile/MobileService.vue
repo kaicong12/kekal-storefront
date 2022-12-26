@@ -5,13 +5,13 @@
     <div class="service-available">
       <div class="first-row-service">
         <ServiceAvailable
-          :display='require("@/assets/installation.svg")'
+          :display='require("@/assets/icons/installation.svg")'
           imageAlt="Installation"
           title="Installation"
           text="Installation of parts and accessories"
         />
         <ServiceAvailable
-          :display='require("@/assets/inspection.svg")'
+          :display='require("@/assets/icons/inspection.svg")'
           imageAlt="Inspection"
           title="Inspection"
           text="Evaluate and send your motorcycle to JPJ inspection"
@@ -19,13 +19,13 @@
       </div>
       <div class="second-row-service">
         <ServiceAvailable
-          :display='require("@/assets/repairs.svg")'
+          :display='require("@/assets/icons/repairs.svg")'
           imageAlt="Repairs"
           title="Repairs"
           text="Problem diagnosis, evaluation and repair services"
         />
         <ServiceAvailable
-          :display='require("@/assets/maintenance.svg")'
+          :display='require("@/assets/icons/maintenance.svg")'
           imageAlt="Maintenance"
           title="Maintenance"
           text="Overhaul, tyre change, tuning and alignment services"

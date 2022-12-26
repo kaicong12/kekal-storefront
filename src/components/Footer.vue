@@ -5,7 +5,7 @@
         <p>We will provice the best service. Your happiness means the world to us</p>
     </div>
     <button>
-        <span><img src="../assets/redWhatsapp.svg" alt="red-whatsapp-icon"></span>
+        <span><img src="../assets/icons/redWhatsapp.svg" alt="red-whatsapp-icon"></span>
         Contact Us
     </button>
   </div>

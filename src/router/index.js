@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MobileHome from "@/views/mobile/MobileHome";
+import MobileProduct from "@/views/mobile/MobileProduct";
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: '/mobile',
     name: 'mobileHome',
     component: MobileHome
+  },
+  {
+    path: '/products',
+    name: 'mobileProduct',
+    component: MobileProduct
   },
 ]
 

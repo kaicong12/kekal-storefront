@@ -3,7 +3,7 @@
     <img class="storefront-image" src="@/assets/storefront.jpg" alt="storefront-background">
     <div class="row-container">
       <div class="brand-logo-container">
-        <img src="@/assets/Logo.svg" alt="img">
+        <img src="@/assets/icons/Logo.svg" alt="img">
       </div>
       <ul class="contact-information">
         <li>
