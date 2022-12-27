@@ -56,4 +56,9 @@ export default {
     flex-direction: row;
     gap: 10px;
   }
+
+  .product-information > li > * {
+    color: #bf1b1b;
+    font-size: 16px;
+  }
 </style>

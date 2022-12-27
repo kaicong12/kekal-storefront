@@ -47,6 +47,17 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+h4 {
+  font-weight: 400;
+  padding: 0 20px;
+  margin-top: 15px;
+}
+
 .service-available {
   padding: 10px;
 }

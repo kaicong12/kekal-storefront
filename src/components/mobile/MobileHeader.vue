@@ -5,7 +5,7 @@
         <!-- Logo Area Start-->
         <div class="item mobile-logo">
             <div class="logo">
-                <a href="#">
+                <a href="/mobile">
                     <img src="@/assets/icons/Logo.svg" alt="img">
                 </a>
             </div>
