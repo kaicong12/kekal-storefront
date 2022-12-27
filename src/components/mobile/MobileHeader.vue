@@ -5,8 +5,8 @@
         <!-- Logo Area Start-->
         <div class="item mobile-logo">
             <div class="logo">
-                <a href="#">
-                    <img src="@/assets/Logo.svg" alt="img">
+                <a href="/mobile">
+                    <img src="@/assets/icons/Logo.svg" alt="img">
                 </a>
             </div>
         </div>
@@ -23,8 +23,8 @@
             </div>
             <div class="mobile-nav-panel">
               <ul>
-                  <li><a href="#">Home</a></li>
-                  <li><a href="#">Product</a></li>
+                  <li><router-link to="/mobile">Home</router-link></li>
+                  <li><router-link to="/products">Product</router-link></li>
                   <li><a href="#">Promotion</a></li>
                   <li><a href="#">Contact Us</a></li>
               </ul>
@@ -79,6 +79,7 @@ export default {
     left: 0;
     box-shadow: 3px 5px 14px -3px rgb(0 0 0 / 11%);
     background-color: white;
+    z-index: 100
   }
 
   .mobile-nav-title {

@@ -1,9 +1,11 @@
 <template>
   <footer class="footer-container">
-    <img class="storefront-image" src="@/assets/storefront.jpg" alt="storefront-background">
+    <div class="storefront-image-container">
+      <img class="storefront-image" src="@/assets/storefront.jpg" alt="storefront-background">
+    </div>
     <div class="row-container">
       <div class="brand-logo-container">
-        <img src="@/assets/Logo.svg" alt="img">
+        <img src="@/assets/icons/Logo.svg" alt="img">
       </div>
       <ul class="contact-information">
         <li>
@@ -37,8 +39,8 @@
     <!-- Social Platforms -->
     <div class="socials">
       <ul class="social-platforms">
-        <li><a href="#"><font-awesome-icon icon="fa-brands fa-facebook" /></a></li>
-        <li><a href="#"><font-awesome-icon icon="fa-brands fa-whatsapp" /></a></li>
+        <li><a href="https://www.facebook.com/PerniagaanMotorKekal"><font-awesome-icon icon="fa-brands fa-facebook" /></a></li>
+        <li><a href="https://wa.me/60127126128"><font-awesome-icon icon="fa-brands fa-whatsapp" /></a></li>
       </ul>
     </div>
 
@@ -58,9 +60,17 @@ export default {
   margin-bottom: -20px;
 }
 
+.storefront-image-container {
+  display: grid;
+  height: 100%;
+  margin: 0;
+  padding: 0
+}
+
 .storefront-image {
-  width: 390px;
-  object-fit: contain;
+  max-width: 100%;
+  max-height: 100vh;
+  margin: auto;
 }
 
 .row-container {

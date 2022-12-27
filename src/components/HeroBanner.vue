@@ -8,7 +8,7 @@
                 Providing all of your needs about motorcycle. Your satisfaction is our priority.
             </p>
             <button class="whatsapp-button">
-                <img src="../assets/WhatsApp.svg" alt="whatsapp" class="icon">
+                <img src="../assets/icons/WhatsApp.svg" alt="whatsapp" class="icon">
                 Contact Us
             </button>
         </div>
@@ -67,11 +67,11 @@
             <div class="contact-information">
                 <div class="contact-details">
                     <h3>Give us a call</h3>
-                    <p><span><img src="../assets/Call.svg" alt="call"></span>+607 355 1943</p>
+                    <p><span><img src="../assets/icons/Call.svg" alt="call"></span>+607 355 1943</p>
                 </div>
                 <div class="location">
                     <h3>Our Location</h3>
-                    <p><span><img src="../assets/Pin.svg" alt="call"></span>5, Jln Seroja 49, <br>Taman Johor Jaya, <br>81100 Johor Bahru</p>
+                    <p><span><img src="../assets/icons/Pin.svg" alt="call"></span>5, Jln Seroja 49, <br>Taman Johor Jaya, <br>81100 Johor Bahru</p>
                 </div>
             </div>
         </div>
@@ -98,10 +98,10 @@ import NavBar from '@/components/NavBar.vue'
 import ServiceAvailable from '@/components/ServiceAvailable.vue'
 import FooterBar from '@/components/Footer.vue'
 
-import Installation from '@/assets/installation.svg'
-import Inspection from '@/assets/inspection.svg'
-import Repairs from '@/assets/repairs.svg'
-import Maintenance from '@/assets/maintenance.svg'
+import Installation from '@/assets/icons/installation.svg'
+import Inspection from '@/assets/icons/inspection.svg'
+import Repairs from '@/assets/icons/repairs.svg'
+import Maintenance from '@/assets/icons/maintenance.svg'
 
 export default {
     name: "HeroBanner",
@@ -302,4 +302,12 @@ export default {
     margin-top: 0px;
 }
 
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid white;
+}
 </style>

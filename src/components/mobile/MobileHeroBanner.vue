@@ -5,8 +5,9 @@
               <h3 class="slogan-h3">Your one stop authorized motorcycle dealer</h3>
               <h5 class="slogan-h5">Providing all of your needs about motorcycle. Your satisfaction is our priority.</h5>
               <button class="whatsapp-button">
-                  <font-awesome-icon icon="fa-brands fa-whatsapp" />
-                  Contact Us
+                  <a href="https://wa.me/60127126128">
+                    <font-awesome-icon icon="fa-brands fa-whatsapp" /> Contact Us
+                  </a>
               </button>
             </div>
         </div>
@@ -14,8 +15,10 @@
 </template>
 
 <script>
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 export default {
-  name: "MobileHeroBanner"
+  name: "MobileHeroBanner",
+  components: {FontAwesomeIcon}
 }
 </script>
 
@@ -55,7 +58,16 @@ export default {
   border: 1px solid #bf1b1b;
   min-width: 110px;
   border-radius: 4px;
-  margin: 0 auto
+  margin: 0 auto;
+}
+
+.slider-information > font-awesome-icon {
+  margin-right: 10px;
+}
+
+.slider-information a {
+  color: white;
+  text-decoration: none;
 }
 
 </style>
