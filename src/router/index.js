@@ -4,13 +4,13 @@ import MobileHome from "@/views/mobile/MobileHome";
 import MobileProduct from "@/views/mobile/MobileProduct";
 
 const routes = [
+  // {
+  //   path: '/',
+  //   name: 'home',
+  //   component: HomeView
+  // },
   {
     path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/mobile',
     name: 'mobileHome',
     component: MobileHome
   },
