@@ -14,9 +14,9 @@ yarn-error.log*
 pnpm-debug.log*
 
 # product assets
-.src/assets/products
-.src/assets/figma
-.src/assets/avatar
+/src/assets/products/
+/src/assets/figma/
+/src/assets/avatar/
 
 # Editor directories and files
 .idea
