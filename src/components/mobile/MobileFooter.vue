@@ -56,7 +56,6 @@ export default {
 <style scoped>
 .footer-container {
   background: #151515;
-  min-width: 390px;
   margin-bottom: -20px;
 }
 

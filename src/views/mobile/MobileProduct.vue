@@ -4,7 +4,7 @@
   <!-- Trail List -->
   <div class="breadcrumb-trail">
     <ul class="trail-items">
-      <li class="trail-begin"><a href="/mobile">Home</a></li>
+      <li class="trail-begin"><a href="/">Home</a></li>
       <li class="trail-arrow"><font-awesome-icon icon="fa-solid fa-angles-right" /></li>
       <li class="trail-active">Products</li>
     </ul>
@@ -24,7 +24,6 @@
           <option value="4">Yamaha</option>
         </select>
       </form>
-
       <form action="" class="select-item">
         <span>Sort By: </span>
         <select name="sort" id="sort">
@@ -35,9 +34,12 @@
         </select>
       </form>
     </div>
-    <MobileProductCard v-for="product in products" :key="product" :product="product"/>
   </div>
   <!-- Filter area ends -->
+
+  <div class="product-card">
+    <MobileProductCard v-for="product in products" :key="product" :product="product"/>
+  </div>
 
   <!-- Pagination button starts -->
   <div class="pagination" v-if="!loading">
@@ -60,6 +62,7 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import MobileFooter from "@/components/mobile/MobileFooter";
 import LoadingPage from "@/components/mobile/LoadingPage";
 import MobileProductCard from "@/components/mobile/MobileProductCard";
+
 
 const motorcycleQuery = query(collection(db, "motorcycles"))
 
@@ -181,6 +184,19 @@ export default {
   margin-right: 5px;
 }
 
+.chosen-text > span > b::after {
+  content: "\f0d7";
+    font-size: 14px;
+    font-weight: normal;
+    color: #aaaaaa;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    line-height: normal;
+    margin-left: -5px;
+    margin-top: -8px;
+}
+
 .pagination {
   display: flex;
   flex-direction: row;
@@ -194,5 +210,10 @@ export default {
   color: #888;
   border: 2px solid #F1F1F1;
   margin-bottom: 20px;
+}
+
+.product-card {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

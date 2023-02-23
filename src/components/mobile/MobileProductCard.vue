@@ -15,8 +15,10 @@
 </template>
 
 <script>
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 export default {
   name: "MobileProductCard",
+  components: {FontAwesomeIcon},
   props: {
     product: Object
   },
@@ -25,13 +27,14 @@ export default {
 
 <style scoped>
   .product-container {
-    margin: 30px 0;
+    margin: 30px 15px;
     border-radius: 8px;
     overflow: hidden;
     position: relative;
     border: 2px solid #F1F1F1;
     padding: 15px 15px 20px;
     background-color: #fff;
+    max-width: 350px;
   }
 
   img {
@@ -43,15 +46,14 @@ export default {
   .product-information {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     flex-wrap: wrap;
-    padding-left: 30px;
+    padding-left: 25px;
   }
 
   .product-information li {
-    width: 100px;
+    width: 80px;
     display: flex;
-    text-align: center;
     margin: 5px 15px;
     flex-direction: row;
     gap: 10px;

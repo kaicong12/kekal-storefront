@@ -27,7 +27,7 @@ export default {
 .home-slider {
   display: block;
   padding: 0 20px;
-  margin: 20px 0;
+  margin: 120px 0 20px;
 }
 
 .slider-owl {
@@ -37,10 +37,12 @@ export default {
   background-size: cover;
   background-position: center center;
   border-radius: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .slider-information {
-  padding: 55px 15px
+  padding: 30px 15px;
 }
 
 .slider-information > * {
