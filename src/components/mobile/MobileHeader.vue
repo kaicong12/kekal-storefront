@@ -23,7 +23,7 @@
             </div>
             <div class="mobile-nav-panel">
               <ul>
-                  <li><router-link to="/mobile">Home</router-link></li>
+                  <li><router-link to="/">Home</router-link></li>
                   <li><router-link to="/products">Product</router-link></li>
                   <li><a href="#">Promotion</a></li>
                   <li><a href="#">Contact Us</a></li>
@@ -53,6 +53,10 @@ export default {
     background-color: rgb(32, 32, 32);
     padding: 25px 0px;
     transition: all 0.4s ease-out 0s;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    z-index: 99;
   }
 
   img {

@@ -6,48 +6,25 @@
       <h2>What they <span>Say About Us</span></h2>
 
       <div class="owl-stage">
-        <div class="owl-item">
-          <div class="single-testimonial-box">
-            <img src="@/assets/avatar/kishore.svg" alt="kishore avatar">
-            <h4>Kishore</h4>
-            <p>Customer</p>
-            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-              sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-              Nemo enim ipsam voluptatem quia voluptas.</p>
-          </div>
-        </div>
+        <div class="touch-tap-left" role="button" aria-label="Previous" tabindex="0" @click="prevSlide"
+             @keyup.enter="prevSlide" @keyup.space="prevSlide"></div>
+          <div class="touch-tap-right" role="button" aria-label="Next" tabindex="0" @click="nextSlide"
+               @keyup.enter="nextSlide" @keyup.space="nextSlide"></div>
 
-<!--        <div class="owl-item">-->
-<!--          <div class="single-testimonial-box">-->
-<!--            <img src="@/assets/avatar/Yamini.svg" alt="Yamini avatar">-->
-<!--            <h4>Yamini</h4>-->
-<!--            <p>Customer</p>-->
-<!--            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,-->
-<!--              sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.-->
-<!--              Nemo enim ipsam voluptatem quia voluptas.</p>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="owl-item">-->
-<!--          <div class="single-testimonial-box">-->
-<!--            <img src="@/assets/avatar/Yong.svg" alt="Yong avatar">-->
-<!--            <h4>Yong</h4>-->
-<!--            <p>Customer</p>-->
-<!--            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,-->
-<!--              sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.-->
-<!--              Nemo enim ipsam voluptatem quia voluptas.</p>-->
-<!--          </div>-->
-<!--        </div>-->
-
+        <TestimonialComponent
+            v-for="(customer, index) in customers"
+            :key="customer.name"
+            :customer="customer"
+            :currentSlide="current"
+            :index="index"
+        />
       </div>
-
 
       <div class="owl-controls">
         <div class="owl-dots">
-          <div class="owl-dot"><span></span></div>
-          <div class="owl-dot"><span></span></div>
-          <div class="owl-dot"><span></span></div>
-          <div class="owl-dot"><span></span></div>
+          <div class="owl-dot" @click= "this.current=0" ><span></span></div>
+          <div class="owl-dot" @click= "this.current=1" ><span></span></div>
+          <div class="owl-dot" @click= "this.current=2" ><span></span></div>
         </div>
       </div>
     </div>
@@ -55,8 +32,47 @@
 </template>
 
 <script>
+import TestimonialComponent from "@/components/mobile/TestimonialComponent";
+
 export default {
-  name: "MobileTestimonial"
+  name: "MobileTestimonial",
+  components: { TestimonialComponent },
+  data() {
+    return {
+      current: 0,
+      customers: [
+        {
+          "name": "Kishore",
+          "avatar": require("@/assets/avatar/kishore.svg"),
+          "review": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,\n" +
+              "                sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.\n" +
+              "                Nemo enim ipsam voluptatem quia voluptas."
+        },
+        {
+          "name": "Yamini",
+          "avatar": require("@/assets/avatar/Yamini.svg"),
+          "review": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,\n" +
+              "                sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.\n" +
+              "                Nemo enim ipsam voluptatem quia voluptas."
+        },
+        {
+          "name": "Yong",
+          "avatar": require("@/assets/avatar/Yong.svg"),
+          "review": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,\n" +
+              "                sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.\n" +
+              "                Nemo enim ipsam voluptatem quia voluptas."
+        },
+      ]
+    }
+  },
+  methods: {
+    nextSlide() {
+      this.current = this.current < this.customers.length - 1 ? this.current += 1 : this.current
+    },
+    prevSlide() {
+      this.current = this.current > 0 ? this.current -= 1 : this.current
+    }
+  }
 }
 </script>
 
@@ -76,15 +92,11 @@ export default {
   top: 0;
   width: 100%;
   height: auto;
-
 }
 
 .container {
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
+  overflow: hidden;
+  height: 450px;
 }
 
 .container h2 {
@@ -100,32 +112,24 @@ export default {
   font-weight: 600;
 }
 
-.owl-item {
-  width: 360px;
-  margin-right: 0px;
+.owl-stage {
+  position: relative;
 }
 
-.single-testimonial-box {
-  border: 2px solid black;
-  margin-bottom: 1px;
-  padding: 30px 20px;
-  text-align: center;
+.touch-tap-left,
+.touch-tap-right {
+  position: absolute;
+  top: 0;
+  width: 20%;
+  height: 100%;
 }
 
-.single-testimonial-box img {
-  width: auto;
-  transform-style: preserve-3d;
-  display: block;
-  max-width: 100%;
-  height: auto;
-  border-radius: 100%;
-  vertical-align: middle;
-  border-style: none;
-  margin: auto;
+.touch-tap-left {
+  left: 0;
 }
-.single-testimonial-box h4 {
-  font-size: 18px;
-  margin-bottom: 0;
+
+.touch-tap-right {
+  right: 0;
 }
 
 .owl-dots {
