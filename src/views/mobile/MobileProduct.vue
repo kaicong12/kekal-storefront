@@ -125,7 +125,7 @@ export default {
 <style scoped>
 
 .trail-items {
-  padding: 25px 30px 20px;
+  padding-left: 30px;
   text-align: left;
 }
 
@@ -175,7 +175,6 @@ export default {
 
 .select-item {
   margin-bottom: 10px;
-  margin-top: 10px;
   vertical-align: top;
   line-height: 28px;
 }

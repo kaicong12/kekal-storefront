@@ -12,7 +12,7 @@
 }
 
 body {
-  margin: 0px;
+  margin: 120px 0 0;
   padding: 0px;
 }
 

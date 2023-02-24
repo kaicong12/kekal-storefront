@@ -3,7 +3,7 @@
         <div class="slider-owl">
             <div class="slider-information">
               <h3 class="slogan-h3">Your one stop authorized motorcycle dealer</h3>
-              <h5 class="slogan-h5">Providing all of your needs about motorcycle. Your satisfaction is our priority.</h5>
+              <h5 class="slogan-h5">Providing all of your needs about motorcycle in Johor Bahru. Your satisfaction is our priority.</h5>
               <button class="whatsapp-button">
                   <a href="https://wa.me/60127126128">
                     <font-awesome-icon icon="fa-brands fa-whatsapp" /> Contact Us
@@ -27,7 +27,6 @@ export default {
 .home-slider {
   display: block;
   padding: 0 20px;
-  margin: 120px 0 20px;
 }
 
 .slider-owl {
@@ -39,10 +38,7 @@ export default {
   border-radius: 10px;
   display: flex;
   align-items: center;
-}
-
-.slider-information {
-  padding: 30px 15px;
+  justify-content: center;
 }
 
 .slider-information > * {
