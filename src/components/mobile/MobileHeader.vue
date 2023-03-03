@@ -5,7 +5,7 @@
         <!-- Logo Area Start-->
         <div class="item mobile-logo">
             <div class="logo">
-                <a href="/mobile">
+                <a href="/">
                     <img src="@/assets/icons/Logo.svg" alt="img">
                 </a>
             </div>
@@ -25,6 +25,7 @@
               <ul>
                   <li><router-link to="/">Home</router-link></li>
                   <li><router-link to="/products">Product</router-link></li>
+                  <li><a href="#">Services</a></li>
                   <li><a href="#">Promotion</a></li>
                   <li><a href="#">Contact Us</a></li>
               </ul>
