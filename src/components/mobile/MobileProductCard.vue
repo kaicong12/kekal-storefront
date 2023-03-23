@@ -8,7 +8,7 @@
       <li><font-awesome-icon icon="fa-solid fa-motorcycle" />{{ product.engine }}</li>
       <li><font-awesome-icon icon="fa-solid fa-tags" />{{ product.price }}</li>
       <li><font-awesome-icon icon="fa-solid fa-calendar" />{{ product.year }}</li>
-      <li><font-awesome-icon icon="fa-solid fa-gears" />{{ product.gear }}</li>
+<!--      <li><font-awesome-icon icon="fa-solid fa-gears" />{{ product.gear }}</li>-->
     </ul>
 
   </div>

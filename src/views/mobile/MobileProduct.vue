@@ -16,21 +16,20 @@
     <h2 class="page-title">Products</h2>
     <div class="shop-top-control">
       <form action="" class="select-item">
-        <span>Brand: </span>
-        <select name="sort" id="sort">
-          <option value="1">Honda</option>
-          <option value="2">Modenas</option>
-          <option value="3">Suzuki</option>
-          <option value="4">Yamaha</option>
+        <label>Brand: </label>
+        <select name="brand" id="brand" v-model="brandValue" @change="loadProducts">
+          <option value="All">Show All</option>
+          <option value="Honda">Honda</option>
+          <option value="Yamaha">Modenas</option>
+          <option value="SYM">SYM</option>
         </select>
       </form>
       <form action="" class="select-item">
-        <span>Sort By: </span>
-        <select name="sort" id="sort">
+        <label>Sort By: </label>
+        <select name="sort" id="sort" v-model="sortValue" @change="loadProducts">
           <option value="1">Price: Low to High</option>
           <option value="2">Price: High to Low</option>
           <option value="3">Manufacturing Year</option>
-          <option value="4">Brand</option>
         </select>
       </form>
     </div>
@@ -43,8 +42,8 @@
 
   <!-- Pagination button starts -->
   <div class="pagination" v-if="!loading">
-    <button>Previous</button>
-    <button>Next</button>
+    <button @click="prevPage" :disabled="!hasPrev">Previous</button>
+    <button @click="nextPage" :disabled="!hasNext">Next</button>
   </div>
   <!-- Pagination button ends -->
 
@@ -53,8 +52,8 @@
 </template>
 
 <script>
-import {ref} from "vue";
-import {collection, onSnapshot, query} from "firebase/firestore";
+import {ref, onMounted} from "vue";
+import {collection, getDocs, limit, orderBy, query, where, startAfter} from "firebase/firestore";
 import {db} from "@/scripts/firebase";
 
 import {retrieveImageUrl} from "@/scripts/storage";
@@ -64,8 +63,7 @@ import LoadingPage from "@/components/mobile/LoadingPage";
 import MobileProductCard from "@/components/mobile/MobileProductCard";
 
 
-const motorcycleQuery = query(collection(db, "motorcycles"))
-
+const motorRef = collection(db, "motorcycles");
 export default {
   name: "MobileProduct",
   components: {
@@ -74,30 +72,44 @@ export default {
     LoadingPage,
     MobileProductCard
   },
-  data() {
-    return {
-      unsub: [],
-      products: [],
-      loading: true,
-      disablePrevious: false,
-      disableNext: false
-    }
-  },
-  mounted() {
-    const [unsubMotorcycles, motorcycles] = this.listMotorcycles()
-    this.unsub.push(unsubMotorcycles)
-    this.products = motorcycles
-  },
-  unmounted() {
-    this.unsub.forEach((callback) => {
-      callback()
-    })
-  },
-  methods: {
-    listMotorcycles() {
-      const motorcycles = ref([])
-      const unsubscribe = onSnapshot(motorcycleQuery, async (querySnapshot) => {
-        motorcycles.value = await Promise.all(querySnapshot.docs.map(async (doc) => {
+  setup() {
+    const products = ref([]);
+    const pageSize = ref(5);
+    const lastVisible = ref(null);
+    const firstVisible = ref(null);
+    const hasNext = ref(true);
+    const hasPrev = ref(false);
+    const brandValue = ref("All");
+    const sortValue = ref("1");
+    const loading = ref(false);
+
+
+    async function loadProducts() {
+      const sort = ref("price");
+      const sortOrder = ref("asc");
+      if (sortValue.value === "2") {
+        sort.value = "price"
+        sortOrder.value = "desc"
+      } else if (sortValue.value === "3") {
+        sort.value =  "year"
+      }
+
+      let q = query(motorRef, orderBy(sort.value, sortOrder.value), limit(Number(pageSize.value)));
+      if (brandValue.value !== "All") {
+        q = query(
+            motorRef,
+            orderBy(sort.value),
+            where("brand", "==", brandValue.value),
+            limit(Number(pageSize.value))
+        );
+      }
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        loading.value = true;
+        firstVisible.value = querySnapshot.docs[0];
+        lastVisible.value = querySnapshot.docs[querySnapshot.docs.length - 1];
+        hasNext.value = !(querySnapshot.size < pageSize.value);
+        products.value = await Promise.all(querySnapshot.docs.map(async (doc) => {
             const motorcycle = doc.data()
             const downloadUrl = await retrieveImageUrl(motorcycle.path)
             return {
@@ -107,25 +119,104 @@ export default {
                 "path": motorcycle.path,
                 "imageUrl": downloadUrl,
                 "year": motorcycle.year,
-                "gear": motorcycle.gear,
+                // "gear": motorcycle.gear,
                 "price": motorcycle.price,
                 "engine": motorcycle.engine
             }
-          }))
-
-        this.loading = false
-        })
-
-      return [unsubscribe, motorcycles]
+        }))
+        loading.value = false;
+      } else {
+        products.value = [];
+        hasNext.value = false;
+      }
     }
-  },
+
+    async function nextPage() {
+      if (!hasNext.value) return;
+      const q = query(motorRef, orderBy(brandValue.value), startAfter(lastVisible.value), limit(Number(pageSize.value)));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        loading.value = true;
+        firstVisible.value = querySnapshot.docs[0];
+        lastVisible.value = querySnapshot.docs[querySnapshot.docs.length - 1];
+        hasNext.value = !(querySnapshot.size < pageSize.value);
+        hasPrev.value = true;
+        products.value = await Promise.all(querySnapshot.docs.map(async (doc) => {
+            const motorcycle = doc.data()
+            const downloadUrl = await retrieveImageUrl(motorcycle.path)
+            return {
+                "id": doc.id,
+                "brand": motorcycle.brand,
+                "model": motorcycle.model,
+                "path": motorcycle.path,
+                "imageUrl": downloadUrl,
+                "year": motorcycle.year,
+                // "gear": motorcycle.gear,
+                "price": motorcycle.price,
+                "engine": motorcycle.engine
+            }
+        }))
+        loading.value = false;
+      } else {
+        hasNext.value = false;
+      }
+    }
+
+    async function prevPage() {
+      if (!hasPrev.value) return;
+      const q = query(motorRef, orderBy(brandValue.value), startAfter(firstVisible.value), limit(Number(pageSize.value)));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        loading.value = true;
+        firstVisible.value = querySnapshot.docs[querySnapshot.docs.length - 1];
+        lastVisible.value = querySnapshot.docs[0];
+        hasNext.value = true;
+        hasPrev.value = firstVisible.value !== querySnapshot.docs[querySnapshot.docs.length - 1];
+        products.value = await Promise.all(querySnapshot.docs.reverse().map(async (doc) => {
+              const motorcycle = doc.data()
+              const downloadUrl = await retrieveImageUrl(motorcycle.path)
+              return {
+                  "id": doc.id,
+                  "brand": motorcycle.brand,
+                  "model": motorcycle.model,
+                  "path": motorcycle.path,
+                  "imageUrl": downloadUrl,
+                  "year": motorcycle.year,
+                  // "gear": motorcycle.gear,
+                  "price": motorcycle.price,
+                  "engine": motorcycle.engine
+              }
+          }));
+        loading.value = false;
+      } else {
+        hasPrev.value = false;
+      }
+    }
+
+    onMounted(() => {
+      loadProducts()
+    })
+
+    return {
+      products,
+      pageSize,
+      loadProducts,
+      nextPage,
+      prevPage,
+      hasNext,
+      hasPrev,
+      loading,
+      brandValue,
+      sortValue,
+    }
+  }
 }
 </script>
 
 <style scoped>
 
 .trail-items {
-  padding: 25px 30px 20px;
+  padding-left: 30px;
   text-align: left;
 }
 
@@ -175,9 +266,11 @@ export default {
 
 .select-item {
   margin-bottom: 10px;
-  margin-top: 10px;
+  margin-right: 20px;
+  padding: 0;
   vertical-align: top;
   line-height: 28px;
+  display: inline-block;
 }
 
 .select-item span {
@@ -215,5 +308,12 @@ export default {
 .product-card {
   display: flex;
   flex-wrap: wrap;
+}
+
+button:not([disabled]) {
+  background-color: #bf1b1b;
+  color: #fff;
+  border-color: transparent;
+  transition: background-color 0.3s;
 }
 </style>
