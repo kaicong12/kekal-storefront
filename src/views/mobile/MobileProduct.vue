@@ -16,21 +16,20 @@
     <h2 class="page-title">Products</h2>
     <div class="shop-top-control">
       <form action="" class="select-item">
-        <span>Brand: </span>
-        <select name="sort" id="sort" v-model="brandValue">
+        <label>Brand: </label>
+        <select name="brand" id="brand" v-model="brandValue" @change="loadProducts">
           <option value="All">Show All</option>
           <option value="Honda">Honda</option>
           <option value="Yamaha">Modenas</option>
-          <option value="SYM">Suzuki</option>
+          <option value="SYM">SYM</option>
         </select>
       </form>
       <form action="" class="select-item">
-        <span>Sort By: </span>
-        <select name="sort" id="sort" v-model="sortValue">
+        <label>Sort By: </label>
+        <select name="sort" id="sort" v-model="sortValue" @change="loadProducts">
           <option value="1">Price: Low to High</option>
           <option value="2">Price: High to Low</option>
           <option value="3">Manufacturing Year</option>
-          <option value="4">Brand</option>
         </select>
       </form>
     </div>
@@ -43,8 +42,8 @@
 
   <!-- Pagination button starts -->
   <div class="pagination" v-if="!loading">
-    <button>Previous</button>
-    <button>Next</button>
+    <button @click="prevPage" :disabled="!hasPrev">Previous</button>
+    <button @click="nextPage" :disabled="!hasNext">Next</button>
   </div>
   <!-- Pagination button ends -->
 
@@ -53,8 +52,8 @@
 </template>
 
 <script>
-import {ref} from "vue";
-import {collection, getDocs, limit, orderBy, query, where} from "firebase/firestore";
+import {ref, onMounted} from "vue";
+import {collection, getDocs, limit, orderBy, query, where, startAfter} from "firebase/firestore";
 import {db} from "@/scripts/firebase";
 
 import {retrieveImageUrl} from "@/scripts/storage";
@@ -73,75 +72,144 @@ export default {
     LoadingPage,
     MobileProductCard
   },
-  data() {
-    return {
-      products: [],
-      loading: true,
-      sortValue: 1,
-      brandValue: "All",
-      pageSize: 5,
-    }
-  },
-  mounted() {
-    this.fetchMotorcycles(
-        this.sortValue, this.brandValue, this.pageSize
-    )
-  },
-  methods: {
-    async fetchMotorcycles() {
-      let ordering
-      if (this.sortValue === "1") {
-          ordering = orderBy("price")
-      } else if (this.sortValue === "2") {
-          ordering = orderBy("price", "desc")
-      } else if (this.sortValue === "3") {
-          ordering = orderBy("year")
-      } else {
-          ordering = orderBy("brand")
+  setup() {
+    const products = ref([]);
+    const pageSize = ref(5);
+    const lastVisible = ref(null);
+    const firstVisible = ref(null);
+    const hasNext = ref(true);
+    const hasPrev = ref(false);
+    const brandValue = ref("All");
+    const sortValue = ref("1");
+    const loading = ref(false);
+
+
+    async function loadProducts() {
+      const sort = ref("price");
+      const sortOrder = ref("asc");
+      if (sortValue.value === "2") {
+        sort.value = "price"
+        sortOrder.value = "desc"
+      } else if (sortValue.value === "3") {
+        sort.value =  "year"
       }
 
-      let filter = null
-      if (this.brandValue === "Honda") {
-          filter = where("brand", "==", "Honda")
-      } else if (this.brandValue === "SYM") {
-          filter = where("brand", "==", "SYM")
-      } else if (this.brandValue === "Yamaha") {
-          filter = where("brand", "==", "Yamaha")
+      let q = query(motorRef, orderBy(sort.value, sortOrder.value), limit(Number(pageSize.value)));
+      if (brandValue.value !== "All") {
+        q = query(
+            motorRef,
+            orderBy(sort.value),
+            where("brand", "==", brandValue.value),
+            limit(Number(pageSize.value))
+        );
       }
-
-      // query the first page of the document
-      const q = query(
-          motorRef,
-          filter,
-          ordering,
-          limit(this.pageSize)
-      );
-
-      this.filter = filter
-      this.ordering = ordering
-
-      const motorcycles = ref([])
       const querySnapshot = await getDocs(q);
-      motorcycles.value = await Promise.all(querySnapshot.docs.map(async (doc) => {
-          const motorcycle = doc.data()
-          const downloadUrl = await retrieveImageUrl(motorcycle.path)
-          return {
-              "id": doc.id,
-              "brand": motorcycle.brand,
-              "model": motorcycle.model,
-              "path": motorcycle.path,
-              "imageUrl": downloadUrl,
-              "year": motorcycle.year,
-              // "gear": motorcycle.gear,
-              "price": motorcycle.price,
-              "engine": motorcycle.engine
-          }
-      }))
+      if (!querySnapshot.empty) {
+        loading.value = true;
+        firstVisible.value = querySnapshot.docs[0];
+        lastVisible.value = querySnapshot.docs[querySnapshot.docs.length - 1];
+        hasNext.value = !(querySnapshot.size < pageSize.value);
+        products.value = await Promise.all(querySnapshot.docs.map(async (doc) => {
+            const motorcycle = doc.data()
+            const downloadUrl = await retrieveImageUrl(motorcycle.path)
+            return {
+                "id": doc.id,
+                "brand": motorcycle.brand,
+                "model": motorcycle.model,
+                "path": motorcycle.path,
+                "imageUrl": downloadUrl,
+                "year": motorcycle.year,
+                // "gear": motorcycle.gear,
+                "price": motorcycle.price,
+                "engine": motorcycle.engine
+            }
+        }))
+        loading.value = false;
+      } else {
+        products.value = [];
+        hasNext.value = false;
+      }
+    }
 
-      this.loading = false
-      this.products = motorcycles
-    },
-  },
+    async function nextPage() {
+      if (!hasNext.value) return;
+      const q = query(motorRef, orderBy(brandValue.value), startAfter(lastVisible.value), limit(Number(pageSize.value)));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        loading.value = true;
+        firstVisible.value = querySnapshot.docs[0];
+        lastVisible.value = querySnapshot.docs[querySnapshot.docs.length - 1];
+        hasNext.value = !(querySnapshot.size < pageSize.value);
+        hasPrev.value = true;
+        products.value = await Promise.all(querySnapshot.docs.map(async (doc) => {
+            const motorcycle = doc.data()
+            const downloadUrl = await retrieveImageUrl(motorcycle.path)
+            return {
+                "id": doc.id,
+                "brand": motorcycle.brand,
+                "model": motorcycle.model,
+                "path": motorcycle.path,
+                "imageUrl": downloadUrl,
+                "year": motorcycle.year,
+                // "gear": motorcycle.gear,
+                "price": motorcycle.price,
+                "engine": motorcycle.engine
+            }
+        }))
+        loading.value = false;
+      } else {
+        hasNext.value = false;
+      }
+    }
+
+    async function prevPage() {
+      if (!hasPrev.value) return;
+      const q = query(motorRef, orderBy(brandValue.value), startAfter(firstVisible.value), limit(Number(pageSize.value)));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        loading.value = true;
+        firstVisible.value = querySnapshot.docs[querySnapshot.docs.length - 1];
+        lastVisible.value = querySnapshot.docs[0];
+        hasNext.value = true;
+        hasPrev.value = firstVisible.value !== querySnapshot.docs[querySnapshot.docs.length - 1];
+        products.value = await Promise.all(querySnapshot.docs.reverse().map(async (doc) => {
+              const motorcycle = doc.data()
+              const downloadUrl = await retrieveImageUrl(motorcycle.path)
+              return {
+                  "id": doc.id,
+                  "brand": motorcycle.brand,
+                  "model": motorcycle.model,
+                  "path": motorcycle.path,
+                  "imageUrl": downloadUrl,
+                  "year": motorcycle.year,
+                  // "gear": motorcycle.gear,
+                  "price": motorcycle.price,
+                  "engine": motorcycle.engine
+              }
+          }));
+        loading.value = false;
+      } else {
+        hasPrev.value = false;
+      }
+    }
+
+    onMounted(() => {
+      loadProducts()
+    })
+
+    return {
+      products,
+      pageSize,
+      loadProducts,
+      nextPage,
+      prevPage,
+      hasNext,
+      hasPrev,
+      loading,
+      brandValue,
+      sortValue,
+    }
+  }
 }
 </script>
 
@@ -198,8 +266,11 @@ export default {
 
 .select-item {
   margin-bottom: 10px;
+  margin-right: 20px;
+  padding: 0;
   vertical-align: top;
   line-height: 28px;
+  display: inline-block;
 }
 
 .select-item span {
@@ -237,5 +308,12 @@ export default {
 .product-card {
   display: flex;
   flex-wrap: wrap;
+}
+
+button:not([disabled]) {
+  background-color: #bf1b1b;
+  color: #fff;
+  border-color: transparent;
+  transition: background-color 0.3s;
 }
 </style>
