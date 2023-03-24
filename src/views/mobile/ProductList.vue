@@ -101,6 +101,8 @@ export default {
 
 
     async function loadProducts() {
+
+      loading.value = true;
       if (sortValue.value === "2") {
         sort.value = "price"
         sortOrder.value = "desc"
@@ -119,7 +121,6 @@ export default {
       }
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
-        loading.value = true;
         firstVisible.value = querySnapshot.docs[0];
         lastVisible.value = querySnapshot.docs[querySnapshot.docs.length - 1];
         hasNext.value = !(querySnapshot.size < pageSize.value);

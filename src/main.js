@@ -9,14 +9,16 @@ import { fab, faWhatsapp, faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { faBars, faX, faLocationDot,
     faPhone, faEnvelope, faClock,
     faCalendar, faGears, faCopyright,
-    faTags, faMotorcycle, faAnglesRight
+    faTags, faMotorcycle, faAnglesRight,
+    faChevronDown, faChevronUp
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
     fab, faBars, faX, faWhatsapp,
     faLocationDot, faPhone, faEnvelope, faClock,
     faFacebook, faCalendar, faGears, faCopyright,
-    faTags, faMotorcycle, faAnglesRight
+    faTags, faMotorcycle, faAnglesRight, faChevronDown,
+    faChevronUp
 )
 
 createApp(App)
