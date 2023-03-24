@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // import HomeView from '../views/HomeView.vue'
 import MobileHome from "@/views/mobile/MobileHome";
-import MobileProduct from "@/views/mobile/MobileProduct";
-import MobileTest from "@/views/mobile/MobileTest";
+import ProductList from "@/views/mobile/ProductList";
+import ProductPage from "@/views/mobile/ProductPage";
 
 const routes = [
   // {
@@ -18,12 +18,13 @@ const routes = [
   {
     path: '/products',
     name: 'mobileProduct',
-    component: MobileProduct
+    component: ProductList
   },
   {
-    path: '/test',
-    name: 'mobileTest',
-    component: MobileTest
+    path: '/product/:id',
+    name: 'ProductDetails',
+    component: ProductPage,
+    props: true,
   },
 ]
 
