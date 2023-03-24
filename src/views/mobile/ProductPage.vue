@@ -14,9 +14,13 @@
   <!-- Trail list ends -->
 
   <!--  product image-->
-  <div v-if="product">
-      <h1>{{ product.brand }}</h1>
-
+  <div class="display-container" v-if="product">
+      <img :src="product.imageUrl" alt="product image">
+      <h3>{{ product.brand }} {{product.model}}</h3>
+      <div class="enquire-button">
+        <button>Enquire Now</button>
+      </div>
+      <h5>Don't miss out the best offers for this month</h5>
   </div>
   <!--  product image ends-->
 
@@ -40,11 +44,16 @@
     </div>
   </div>
 
+  <transition name="slide" v-show="showPopup">
+    <div class="enquire-popup">
+      <button>Enquire Now</button>
+    </div>
+  </transition>
 
 </template>
 
 <script>
-import {ref, onBeforeMount} from 'vue';
+import {ref, onBeforeMount, onMounted, onUnmounted} from 'vue';
 import { useRoute } from 'vue-router';
 import {fetchProductData} from "@/scripts/db";
 import MobileHeader from "@/components/mobile/MobileHeader";
@@ -61,22 +70,69 @@ export default {
     const route = useRoute();
     const active = ref(false);
     const tabSelected = ref(1);
+    const showPopup = ref(false);
+
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+      const threshold = 300; // Replace this value with the desired scroll length
+
+      if (scrollPosition > threshold) {
+        showPopup.value = true;
+      } else {
+        showPopup.value = false;
+      }
+    };
 
     onBeforeMount(async () => {
       const productId = props.id || route.params.id;
       product.value = await fetchProductData(productId);
     });
 
+    onMounted(() => {
+      window.addEventListener('scroll', handleScroll);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll);
+    });
+
     return {
       product,
       active,
       tabSelected,
+      showPopup
     };
   },
 }
 </script>
 
 <style scoped>
+
+.display-container {
+  padding: 0 16px;
+}
+
+.display-container h5 {
+  font-weight: 400;
+  font-size: 12px;
+  color: rgba(36,39,44,0.5);
+}
+
+.display-container img {
+  width: 100%;
+  max-width: 400px;
+}
+
+.enquire-button button {
+  background: #f34653;
+  width: 90%;
+  color: #fff;
+  text-align: center;
+  font-size: 15px;
+  display: inline-block;
+  border: 1px solid transparent;
+}
+
 .trail-items {
   padding-left: 30px;
   text-align: left;
@@ -198,6 +254,32 @@ export default {
 ::-webkit-scrollbar {
     width: 0;
     height: 0;
+}
+
+.enquire-popup {
+  position: sticky;
+  background: #fff;
+  width: 100%;
+  padding: 8px 20px;
+  left: 0;
+  height: 64px;
+  right: 0;
+  bottom: 0;
+  z-index: 11;
+  transition: all 0.2s;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.slide-enter-from {
+  transform: translateY(100%);
+}
+
+.slide-leave-to {
+  transform: translateY(100%);
 }
 
 </style>
