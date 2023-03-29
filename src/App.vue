@@ -16,6 +16,11 @@ body {
   padding: 0px;
 }
 
+ul {
+  padding-inline-start: 0;
+
+}
+
 li {
   list-style: none;
 }

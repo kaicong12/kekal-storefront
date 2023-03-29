@@ -20,7 +20,7 @@
         <select name="brand" id="brand" v-model="brandValue" @change="loadProducts">
           <option value="All">Show All</option>
           <option value="Honda">Honda</option>
-          <option value="Yamaha">Modenas</option>
+          <option value="Yamaha">Yamaha</option>
           <option value="SYM">SYM</option>
         </select>
       </form>
@@ -94,9 +94,8 @@ export default {
 
 
     const router = useRouter();
-
     function goToProductDetails(productId) {
-      router.push({ name: 'ProductDetails', params: { id: productId } });
+      router.push({ name: 'ProductPage', params: { id: productId } });
     }
 
 
@@ -134,7 +133,16 @@ export default {
 
     async function nextPage() {
       if (!hasNext.value) return;
-      const q = query(motorRef, orderBy(sort.value, sortOrder.value), startAfter(lastVisible.value), limit(Number(pageSize.value)));
+      let q = query(motorRef, orderBy(sort.value, sortOrder.value), startAfter(lastVisible.value), limit(Number(pageSize.value)));
+      if (brandValue.value !== "All") {
+        q = query(
+            motorRef,
+            orderBy(sort.value, sortOrder.value),
+            startAfter(lastVisible.value),
+            where("brand", "==", brandValue.value),
+            limit(Number(pageSize.value))
+        );
+      }
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         loading.value = true;
@@ -151,7 +159,16 @@ export default {
 
     async function prevPage() {
       if (!hasPrev.value) return;
-      const q = query(motorRef, orderBy(sort.value, sortOrder.value), startAfter(firstVisible.value), limit(Number(pageSize.value)));
+      let q = query(motorRef, orderBy(sort.value, sortOrder.value), startAfter(firstVisible.value), limit(Number(pageSize.value)));
+      if (brandValue.value !== "All") {
+        q = query(
+            motorRef,
+            orderBy(sort.value, sortOrder.value),
+            startAfter(firstVisible.value),
+            where("brand", "==", brandValue.value),
+            limit(Number(pageSize.value))
+        );
+      }
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         loading.value = true;
