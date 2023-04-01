@@ -8,7 +8,6 @@
       <li><font-awesome-icon icon="fa-solid fa-motorcycle" />{{ product.engine }}</li>
       <li><font-awesome-icon icon="fa-solid fa-tags" />{{ product.price }}</li>
       <li><font-awesome-icon icon="fa-solid fa-calendar" />{{ product.year }}</li>
-<!--      <li><font-awesome-icon icon="fa-solid fa-gears" />{{ product.gear }}</li>-->
     </ul>
 
   </div>
@@ -29,7 +28,6 @@ export default {
   .product-container {
     margin: 30px 15px;
     border-radius: 8px;
-    overflow: hidden;
     position: relative;
     border: 2px solid #F1F1F1;
     padding: 15px 15px 20px;
@@ -38,8 +36,8 @@ export default {
   }
 
   img {
-    max-width: 100%;
     height: 300px;
+    width: 300px;
     border-radius: 8px;
   }
 

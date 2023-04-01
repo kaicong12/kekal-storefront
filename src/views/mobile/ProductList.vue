@@ -58,7 +58,6 @@
 
 <script>
 import {ref, onMounted} from "vue";
-import { useRouter } from 'vue-router';
 import {collection, getDocs, limit, orderBy, query, where, startAfter} from "firebase/firestore";
 import {db} from "@/scripts/firebase";
 
@@ -68,6 +67,7 @@ import MobileHeader from "@/components/mobile/MobileHeader";
 import MobileFooter from "@/components/mobile/MobileFooter";
 import LoadingPage from "@/components/mobile/LoadingPage";
 import MobileProductCard from "@/components/mobile/MobileProductCard";
+import {useRouter} from "vue-router/dist/vue-router";
 
 
 const motorRef = collection(db, "motorcycles");
@@ -212,7 +212,7 @@ export default {
       loading,
       brandValue,
       sortValue,
-      goToProductDetails,
+      goToProductDetails
     }
   }
 }
