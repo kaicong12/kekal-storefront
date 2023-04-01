@@ -17,6 +17,7 @@ pnpm-debug.log*
 /src/assets/products/
 /src/assets/figma/
 /src/assets/avatar/
+/src/assets/events/
 
 # Editor directories and files
 .idea
