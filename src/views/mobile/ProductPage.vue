@@ -42,14 +42,29 @@
         <li @click="tabSelected=4" :class="tabSelected===4 ? 'selectedTab' : 'unselected'">Gear & Transmission</li>
       </ul>
     </div>
+
+    <div v-if="active" class="tab-panels">
+      <SpecsPanel :specs="dimensionSpecs"/>
+    </div>
   </div>
+  <!--  product specs ends-->
+
+  <!--  recommendation starts-->
+  <div class="recommendation">
+
+  </div>
+  <!--  recommendation ends-->
+
 
   <transition name="slide" v-show="showPopup">
-    <div class="enquire-popup">
+    <div class="enquire-button sticky-button">
       <button>Enquire Now</button>
     </div>
   </transition>
 
+
+  <LoadingPage v-if="loading" @scroll.prevent/>
+  <MobileFooter v-if="!loading" />
 </template>
 
 <script>
@@ -57,6 +72,9 @@ import {ref, onBeforeMount, onMounted, onUnmounted} from 'vue';
 import { useRoute } from 'vue-router';
 import {fetchProductData} from "@/scripts/db";
 import MobileHeader from "@/components/mobile/MobileHeader";
+import SpecsPanel from "@/components/mobile/SpecsPanel";
+import MobileFooter from "@/components/mobile/MobileFooter";
+import LoadingPage from "@/components/mobile/LoadingPage";
 
 
 export default {
@@ -64,18 +82,27 @@ export default {
   props: ['id'],
   components: {
     MobileHeader,
+    SpecsPanel,
+    MobileFooter,
+    LoadingPage
   },
   setup(props) {
+    const loading = ref(true);
     const product = ref(null);
     const route = useRoute();
     const active = ref(false);
     const tabSelected = ref(1);
     const showPopup = ref(false);
+    const dimensionSpecs = ref({
+      'displacement': '150cc',
+      'maximum power': '15.1hp',
+      'fuel tank capacity': '4.2L',
+      'Cooling system': 'Liquid Coooled'
+    })
 
     const handleScroll = () => {
       const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-      const threshold = 300; // Replace this value with the desired scroll length
-
+      const threshold = 400; // Replace this value with the desired scroll length
       if (scrollPosition > threshold) {
         showPopup.value = true;
       } else {
@@ -86,6 +113,7 @@ export default {
     onBeforeMount(async () => {
       const productId = props.id || route.params.id;
       product.value = await fetchProductData(productId);
+      loading.value = false;
     });
 
     onMounted(() => {
@@ -100,7 +128,9 @@ export default {
       product,
       active,
       tabSelected,
-      showPopup
+      showPopup,
+      dimensionSpecs,
+      loading,
     };
   },
 }
@@ -256,30 +286,30 @@ export default {
     height: 0;
 }
 
-.enquire-popup {
-  position: sticky;
+.sticky-button {
+  position: fixed;
   background: #fff;
   width: 100%;
-  padding: 8px 20px;
   left: 0;
-  height: 64px;
   right: 0;
   bottom: 0;
-  z-index: 11;
-  transition: all 0.2s;
+  z-index: 1000;
+  padding: 5px 0
 }
 
 .slide-enter-active,
 .slide-leave-active {
-  transition: opacity 0.3s ease;
+  transition: transform 0.5s ease-in-out;
 }
 
-.slide-enter-from {
-  transform: translateY(100%);
-}
-
+.slide-enter-from,
 .slide-leave-to {
   transform: translateY(100%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateY(0%);
 }
 
 </style>

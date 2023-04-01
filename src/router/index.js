@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MobileHome from "@/views/mobile/MobileHome";
 import ProductList from "@/views/mobile/ProductList";
 import ProductPage from "@/views/mobile/ProductPage";
+import ServicesPage from "@/views/mobile/ServicesPage";
 
 const routes = [
   // {
@@ -22,9 +23,14 @@ const routes = [
   },
   {
     path: '/product/:id',
-    name: 'ProductDetails',
+    name: 'ProductPage',
     component: ProductPage,
     props: true,
+  },
+  {
+    path: '/services',
+    name: 'servicesPage',
+    component: ServicesPage
   },
 ]
 
